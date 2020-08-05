@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:time_ticker/app/sign_in/emailSignInPage.dart';
 import 'package:time_ticker/app/sign_in/signInButton.dart';
 import 'package:time_ticker/app/sign_in/socialSignInButton.dart';
 import 'package:time_ticker/services/auth.dart';
+import 'package:time_ticker/widgets/platformAlertDialog.dart';
+import 'package:time_ticker/widgets/platformExceptionAlertDialog.dart';
 
 class SignInPage extends StatelessWidget {
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: "Anonymous Sign in failed",
+        exception: e,
+      ).show(context);
     }
   }
 
@@ -19,8 +25,11 @@ class SignInPage extends StatelessWidget {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithGoogle();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (e) {
+      PlatformExceptionAlertDialog(
+        title: "Google Sign in failed",
+        exception: e,
+      ).show(context);
     }
   }
 
