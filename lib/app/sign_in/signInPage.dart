@@ -7,24 +7,36 @@ import 'package:time_ticker/app/sign_in/socialSignInButton.dart';
 import 'package:time_ticker/services/auth.dart';
 import 'package:time_ticker/widgets/platformExceptionAlertDialog.dart';
 
-class SignInPage extends StatelessWidget {
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
 
-  void _showSignInError(BuildContext context, PlatformException exception, String title) {
+class _SignInPageState extends State<SignInPage> {
+  bool _isLoading = false;
+
+  void _showSignInError(
+      BuildContext context, PlatformException exception, String title) {
     PlatformExceptionAlertDialog(
       title: title,
       exception: exception,
     ).show(context);
   }
+
   Future<void> _signInAnonymously(BuildContext context) async {
+    setState(() => _isLoading = true);
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
     } on PlatformException catch (e) {
       _showSignInError(context, e, "Anonymous Sign in failed");
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithGoogle(BuildContext context) async {
+    setState(() => _isLoading = true);
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithGoogle();
@@ -32,6 +44,8 @@ class SignInPage extends StatelessWidget {
       if (e.code != "ERROR_ABORTED_BY_USER") {
         _showSignInError(context, e, "Google Sign in failed");
       }
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -52,13 +66,9 @@ class SignInPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Text(
-            "Sign in",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 32.0,
-            ),
+          SizedBox(
+            height: 50.0,
+            child: _buildHeader(),
           ),
           SizedBox(height: 48.0),
           SocialSignInButton(
@@ -66,7 +76,7 @@ class SignInPage extends StatelessWidget {
             image: "images/google-logo.png",
             color: Colors.white,
             textColor: Colors.black87,
-            onPressed: () => _signInWithGoogle(context),
+            onPressed: _isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 8.0),
           SocialSignInButton(
@@ -74,14 +84,14 @@ class SignInPage extends StatelessWidget {
             image: "images/facebook-logo.png",
             color: Color(0xFF334D92),
             textColor: Colors.white,
-            onPressed: () {},
+            onPressed: _isLoading ? null : () {},
           ),
           SizedBox(height: 8.0),
           SignInButton(
             text: "Sign in with Email",
             textColor: Colors.white,
             color: Colors.teal[700],
-            onPressed: () => _signInWithEmail(context),
+            onPressed: _isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 8.0),
           Text(
@@ -93,9 +103,25 @@ class SignInPage extends StatelessWidget {
           SignInButton(
             text: "Go anonymous",
             color: Colors.lime[300],
-            onPressed: () => _signInAnonymously(context),
+            onPressed: _isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    if (_isLoading) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+    return Text(
+      "Sign in",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 32.0,
       ),
     );
   }
@@ -110,4 +136,14 @@ class SignInPage extends StatelessWidget {
       body: _buildContent(context),
     );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }
+//
+//class SignInPage extends StatelessWidget {
+//
+//
+//}
