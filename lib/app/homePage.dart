@@ -6,7 +6,7 @@ import 'package:time_ticker/widgets/platformAlertDialog.dart';
 class HomePage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
-      final auth = Provider.of<AuthBase>(context);
+      final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signOut();
     } catch (e) {
       print(e.toString());
