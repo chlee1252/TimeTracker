@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:time_ticker/app/landingPage.dart';
 import 'package:time_ticker/services/auth.dart';
-import 'package:time_ticker/services/authProvider/authProvider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,8 +10,8 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return AuthProvider(
-      auth: Auth(),
+    return Provider<AuthBase>(
+      create: (context) => Auth(),
       child: MaterialApp(
         title: 'Time Tracker',
         theme: ThemeData(

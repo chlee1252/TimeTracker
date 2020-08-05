@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:time_ticker/app/sign_in/validator.dart';
-import 'package:time_ticker/services/authProvider/authProvider.dart';
+import 'package:time_ticker/services/auth.dart';
 import 'package:time_ticker/widgets/formSubmitButton.dart';
 import 'package:time_ticker/widgets/platformAlertDialog.dart';
 
@@ -32,7 +33,7 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
       _isLoading = true;
     });
     try {
-      final auth = AuthProvider.of(context);
+      final auth = Provider.of<AuthBase>(context);
       if (_formType == EmailSignInFormType.signIn) {
         await auth.signInWithEmailAndPassword(_email, _password);
       } else {
