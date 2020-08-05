@@ -5,19 +5,22 @@ import 'package:time_ticker/app/sign_in/emailSignInPage.dart';
 import 'package:time_ticker/app/sign_in/signInButton.dart';
 import 'package:time_ticker/app/sign_in/socialSignInButton.dart';
 import 'package:time_ticker/services/auth.dart';
-import 'package:time_ticker/widgets/platformAlertDialog.dart';
 import 'package:time_ticker/widgets/platformExceptionAlertDialog.dart';
 
 class SignInPage extends StatelessWidget {
+
+  void _showSignInError(BuildContext context, PlatformException exception, String title) {
+    PlatformExceptionAlertDialog(
+      title: title,
+      exception: exception,
+    ).show(context);
+  }
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInAnonymously();
     } on PlatformException catch (e) {
-      PlatformExceptionAlertDialog(
-        title: "Anonymous Sign in failed",
-        exception: e,
-      ).show(context);
+      _showSignInError(context, e, "Anonymous Sign in failed");
     }
   }
 
@@ -26,10 +29,9 @@ class SignInPage extends StatelessWidget {
       final auth = Provider.of<AuthBase>(context, listen: false);
       await auth.signInWithGoogle();
     } on PlatformException catch (e) {
-      PlatformExceptionAlertDialog(
-        title: "Google Sign in failed",
-        exception: e,
-      ).show(context);
+      if (e.code != "ERROR_ABORTED_BY_USER") {
+        _showSignInError(context, e, "Google Sign in failed");
+      }
     }
   }
 
