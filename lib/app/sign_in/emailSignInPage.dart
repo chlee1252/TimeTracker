@@ -21,6 +21,6 @@ class EmailSignInPage extends StatelessWidget {
   }
 
   Widget _buildContent() {
-    return EmailSignInForm();
+    return EmailSignInFormStateful();
   }
 }

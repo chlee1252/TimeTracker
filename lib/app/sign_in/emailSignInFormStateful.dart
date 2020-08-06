@@ -6,16 +6,16 @@ import 'package:time_ticker/services/auth.dart';
 import 'package:time_ticker/widgets/formSubmitButton.dart';
 import 'package:time_ticker/widgets/platformExceptionAlertDialog.dart';
 
-enum EmailSignInFormType { signIn, register }
+import 'package:time_ticker/app/sign_in/emailSignInModel.dart';
 
-class EmailSignInForm extends StatefulWidget with EmailAndPasswordValidators {
-
+class EmailSignInFormStateful extends StatefulWidget
+    with EmailAndPasswordValidators {
   @override
-  _EmailSignInFormState createState() => _EmailSignInFormState();
+  _EmailSignInFormStatefulState createState() =>
+      _EmailSignInFormStatefulState();
 }
 
-class _EmailSignInFormState extends State<EmailSignInForm> {
-
+class _EmailSignInFormStatefulState extends State<EmailSignInFormStateful> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -23,12 +23,11 @@ class _EmailSignInFormState extends State<EmailSignInForm> {
 
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
-
   EmailSignInFormType _formType = EmailSignInFormType.signIn;
   bool _submitted = false;
   bool _isLoading = false;
 
-  void _submit() async {
+  Future<void> _submit() async {
     setState(() {
       _submitted = true;
       _isLoading = true;
