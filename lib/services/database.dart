@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:time_ticker/app/home/models/job.dart';
 
 abstract class Database {
-  Future<void> createJob(Map<String, dynamic> jobData);
+  Future<void> createJob(Job job);
 }
 
 class FirestoreDatabase implements Database {
@@ -11,9 +12,9 @@ class FirestoreDatabase implements Database {
   }) : assert(uid != null);
   final String uid;
 
-  Future<void> createJob(Map<String, dynamic> jobData) async {
+  Future<void> createJob(Job job) async {
     final path = '/users/$uid/jobs/job_abc';
     final documentReference = Firestore.instance.document(path);
-    await documentReference.setData(jobData);
+    await documentReference.setData(job.toMap());
   }
 }
