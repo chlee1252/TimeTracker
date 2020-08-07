@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:time_ticker/services/auth.dart';
 
-class SignInBloc {
-  SignInBloc({@required this.auth, @required this.isLoading});
+class SignInManager {
+  SignInManager({@required this.auth, @required this.isLoading});
 
   final AuthBase auth;
   final ValueNotifier<bool> isLoading;
 
   /*
   * The Commented code is using StreamController
-  * */
+  */
 //  final StreamController<bool> _isLoadingController = StreamController<bool>();
 //
 //  Stream<bool> get isLoadingStream => _isLoadingController.stream;
