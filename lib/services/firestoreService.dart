@@ -2,6 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreService {
+
+  // FirestoreService cannot create outside of this file.
+  // Ensure only one object of FirestoreService created.
   FirestoreService._();
   static final instance = FirestoreService._();
   

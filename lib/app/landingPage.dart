@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:time_ticker/app/home/jobsPage.dart';
+import 'package:time_ticker/app/home/jobs/jobsPage.dart';
 import 'package:time_ticker/app/sign_in/signInPage.dart';
 import 'package:time_ticker/services/auth.dart';
 import 'package:time_ticker/services/database.dart';
