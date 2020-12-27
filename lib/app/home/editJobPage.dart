@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -83,6 +84,9 @@ class _EditJobPageState extends State<EditJobPage> {
     try {
       final jobs = await widget.database.jobsStream().first;
       final allNames = jobs.map((job) => job.name).toList();
+      if (widget.job != null) {
+        allNames.remove(widget.job.name);
+      }
       if (allNames.contains(_name)) {
         PlatformAlertDialog(
           title: "Name Already in Use",
@@ -90,8 +94,9 @@ class _EditJobPageState extends State<EditJobPage> {
           defaultActionText: "OK",
         ).show(context);
       } else {
-        final job = Job(name: _name, ratePerHour: _ratePerHour);
-        await database.createJob(job);
+        final id = widget.job?.id ?? documentIdFromCurrentDate();
+        final job = Job(id: id, name: _name, ratePerHour: _ratePerHour);
+        await database.setJob(job);
         Navigator.pop(context);
       }
     } on PlatformException catch (e) {
