@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:time_ticker/app/home/addJobPage.dart';
+import 'package:time_ticker/app/home/editJobPage.dart';
 import 'package:time_ticker/app/home/jobs/jobListTile.dart';
 import 'package:time_ticker/app/home/models/job.dart';
 import 'package:time_ticker/services/auth.dart';
@@ -53,7 +53,7 @@ class JobsPage extends StatelessWidget {
           final children = jobs
               .map((job) => JobListTile(
                     job: job,
-                    onTap: () {},
+                    onTap: () => EditJobPage.show(context, job: job),
                   ))
               .toList();
           return ListView(
@@ -90,7 +90,7 @@ class JobsPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => AddJobPage.show(context),
+        onPressed: () => EditJobPage.show(context),
 //        onPressed: () => _createJob(context),
       ),
       body: _buildContents(context),
